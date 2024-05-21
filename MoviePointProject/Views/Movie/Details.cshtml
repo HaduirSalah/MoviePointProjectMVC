@@ -1,0 +1,136 @@
+﻿@model MovieDetailsViewModel
+
+@{
+	Layout = "_NavAndFooterLayout";
+	ViewData["Title"] = "Movie Details";
+}
+
+<!-- breadcrumb area start -->
+<section class="breadcrumb-area">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="breadcrumb-area-content">
+					<h1>Movie Detalied Page</h1>
+				</div>
+			</div>
+		</div>
+	</div>
+</section><!-- breadcrumb area end -->
+<!-- transformers area start -->
+<section class="transformers-area">
+	<div class="container">
+		<div class="transformers-box">
+			<div class="row flexbox-center">
+				<div class="col-lg-5 text-lg-left text-center">
+					<div class="transformers-content">
+						<img src="@Model.MovieImageUrl" alt="about" />
+					</div>
+				</div>
+				<div class="col-lg-7">
+					<div class="transformers-content">
+						<h2>@Model.MovieName</h2>
+						<ul>
+							<li>
+								<div class="transformers-left">
+									Movie:
+								</div>
+								<div class="transformers-right">
+									@Model.MovieCategory.ToString()
+								</div>
+							</li>
+							<li>
+								<div class="transformers-left">
+									Producer:
+								</div>
+								<div class="transformers-right">
+									@Model.ProducerName
+								</div>
+							</li>
+							<li>
+								<div class="transformers-left">
+									Start Date:
+								</div>
+								<div class="transformers-right">
+									@Model.MovieStartDate.ToString("dd MMM yyyy")
+								</div>
+							</li>
+							<li>
+								<div class="transformers-left">
+									End Date:
+								</div>
+								<div class="transformers-right">
+									@Model.MovieEndDate.ToString("dd MMM yyyy")
+								</div>
+							</li>
+							<li>
+								<div class="transformers-left">
+									Price:
+								</div>
+								<div class="transformers-right">
+									@Model.MoviePrice L.E
+								</div>
+							</li>
+							<li>
+								<div class="transformers-left">
+									Cinema:
+								</div>
+								<div class="transformers-right">
+									Name: @Model.CinemaName
+									<br />
+									Location: @Model.CinemaLocation
+								</div>
+							</li>
+							<li>
+								<div class="transformers-left">
+									Share:
+								</div>
+								<div class="transformers-right">
+									<a href="#"><i class="icofont icofont-social-facebook"></i></a>
+									<a href="#"><i class="icofont icofont-social-twitter"></i></a>
+									<a href="#"><i class="icofont icofont-social-google-plus"></i></a>
+									<a href="#"><i class="icofont icofont-youtube-play"></i></a>
+								</div>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+			<a href="#" class="theme-btn"><i class="icofont icofont-ticket"></i> BUY TICKET</a>
+		</div>
+	</div>
+</section><!-- transformers area end -->
+<!-- details area start -->
+<section class="details-area">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-9">
+				<div class="details-content">
+					<div class="details-overview">
+						<h2>Overview</h2>
+						<p>@Model.MovieDescription</p>
+					</div>
+				</div>
+				<div class="col-lg-12 text-center text-lg-left">
+					<div class="portfolio-sidebar">
+						<img class="col-lg-3" src="/img/sidebar/sidebar1.png" alt="sidebar" />
+						<img class="col-lg-3" src="/img/sidebar/sidebar2.png" alt="sidebar" />
+						<img class="col-lg-3" src="/img/sidebar/sidebar4.png" alt="sidebar" />
+					</div>
+				</div>
+			</div>
+			<div class="col-lg-3">
+				<div class="blog-sidebar">
+					<h4>Recent Comments</h4>
+					<ul id="AllComment">
+						@foreach (var item in ViewBag.Comments)
+						{
+							<li>@item.comment <br /><span style="color:#eb315a;font-size:10px;">@item.CommentDate.ToString("MMM dd yyyy - HH:mm tt") </span></li>
+						}
+					</ul>
+				</div>
+			</div>
+			
+		</div>
+	</div>
+</section><!-- details area end -->

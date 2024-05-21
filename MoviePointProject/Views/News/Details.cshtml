@@ -1,0 +1,140 @@
+﻿@model MoviePoint.ViewModel.MovieWithUserViewModel
+
+@{
+    ViewData["Title"] = "Details";
+	Layout = "_NavAndFooterLayout";
+}
+
+<section class="breadcrumb-area">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="breadcrumb-area-content">
+					<h1>Blog Details Page</h1>
+				</div>
+			</div>
+		</div>
+	</div>
+</section><!-- breadcrumb area end -->
+<!-- blog area start -->
+<section class="blog-details">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-9">
+				<div class="news-details">
+					<div class="single-news">
+						<div style="height: 350px;">
+							<img src="@Model.Movie.ImageUrl" alt="MoviePic" style="width:100% !important;height: 350px !important;object-fit:cover !important;" />
+						</div>
+						<div class="news-date">
+							<h2>
+								<span>
+									@Model.Movie.StartDate.ToString("MMM").ToUpper()
+								</span> @Model.Movie.StartDate.Day
+							</h2>
+							<h1>@Model.Movie.StartDate.Year</h1>
+						</div>
+					</div>
+					<h2>@Model.Movie.Name</h2>
+					<a href="#"><i class="icofont icofont-users"></i>@Model.Movie.Category.ToString()</a>
+					<a href="#"><i class="icofont icofont-comment"></i>1k Comments</a>
+					<p>@Model.Movie.Description</p>
+					<div class="detail-author">
+						<div class="row flexbox-center">
+							<div class="col-lg-6 text-lg-left text-center">
+								<div class="details-author">
+									<h4>Share:</h4>
+									<a href="#"><i class="icofont icofont-social-facebook"></i></a>
+									<a href="#"><i class="icofont icofont-social-twitter"></i></a>
+									<a href="#"><i class="icofont icofont-social-pinterest"></i></a>
+									<a href="#"><i class="icofont icofont-social-linkedin"></i></a>
+									<a href="#"><i class="icofont icofont-social-google-plus"></i></a>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="text-center">
+						<img src="/img/blog-detail.png" alt="" />
+					</div>
+					<div class="details-reply">
+						<h2>Leave a Reply</h2>
+						<form action="#">
+							<div class="row">
+								<div class="col-lg-12">
+									<div class="textarea-container">
+										<textarea id="textcomment" placeholder="Type Here Message"></textarea>
+										<button><i class="icofont icofont-send-mail"></i></button>
+									</div>
+								</div>
+							</div>
+						</form>
+					</div>
+					<div class="details-comment">
+						<button class="theme-btn theme-btn2" onclick="SendComment()">Post Comment</button>
+					</div>
+				</div>
+			</div>
+			<div class="col-lg-3">
+				<div class="blog-sidebar">
+					<h4>Recent Comments</h4>
+					<ul id="AllComment">
+						@foreach(var item in Model.Comments)
+						{
+							<li>@item.comment <br /><span style="color:#eb315a;font-size:10px;">@item.CommentDate.ToString("MMM dd yyyy - HH:mm tt") </span></li>
+						}
+					</ul>
+					<div class="portfolio-sidebar">
+						<img src="/img/sidebar/sidebar1.png" alt="sidebar" />
+						<img src="/img/sidebar/sidebar2.png" alt="sidebar" />
+						<img src="/img/sidebar/sidebar4.png" alt="sidebar" />
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+
+@section Scripts{
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/aspnet-signalr/1.1.4/signalr.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.3/signalr.min.js"
+			integrity="sha512-/rQxup+foY5qwZmEmvBhb0PHxx/Fd+ESH7Xw+pozdSKhygl+ZSQm1X6LWDQrxz+NoRAZwR03X78UinlY1C4RrQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+	<script>
+		var hub = new signalR.HubConnectionBuilder().withUrl("/MovieHub").build();
+		
+		hub.start().then(function () {
+			console.log("Connect Success");
+		});
+
+		hub.on("NewComment", function (c) {
+			console.log("from NewComment method " + c.comment + " " + c.CommentDate + " " + c.userID + " " + c.movieID);
+			$("#AllComment").append("<li>" + c.comment +"<br/><span style='color:#eb315a;font-size:10px;'>Now</span></li>");
+
+		});
+
+		console.log("berfor");
+
+		function SendComment() {
+			console.log("After");
+
+			let com = $("#textcomment").val();
+			console.log(com);
+
+			var date=new Date();
+			let comment = {
+				'comt': com,
+				'movieid': @Model.Movie.Id,
+				'userid': "@Model.UserID.ToString()", 
+				'commentdate': date.toISOString()
+			};
+
+			console.log(com)
+			console.log("from WriteComment method" + comment);
+			
+			console.log(date.toISOString().toString());
+			hub.invoke("WriteComment", com, "@Model.Movie.Id.ToString()", "@Model.UserID.ToString()", date.toISOString().toString())// @Model.UserID
+		}
+	</script>
+
+}
+
